@@ -10,7 +10,6 @@ class order: ['A', 'N', 'O', '~']
 import numpy as np
 from sklearn import ensemble
 from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
 from OptF import OptF
 from copy import deepcopy
 import xgboost as xgb
@@ -52,9 +51,9 @@ class MyXGB(object):
         print(self.param.items())
         print(self.num_round)
 
-    def fit(self, train_data, train_label):
+    def fit(self, train_data, train_label, feature_names=None):
         train_label = ReadData.Label2Index(train_label)
-        dtrain = xgb.DMatrix(train_data, label=train_label)
+        dtrain = xgb.DMatrix(train_data, label=train_label, feature_names=feature_names)
         self.bst = xgb.train(self.param, dtrain, num_boost_round=self.num_round)
 
     def predict_prob(self, test_data):

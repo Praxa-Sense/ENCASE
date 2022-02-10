@@ -20,10 +20,6 @@ from scipy.signal import periodogram
 import random
 from sklearn.model_selection import StratifiedKFold
 import math
-from BasicCLF import MyXGB
-from BasicCLF import MyLR
-from BasicCLF import MyRF
-import warnings
 from minNCCE import minimumNCCE
 import dill
 from fastdtw import fastdtw

@@ -1,4 +1,7 @@
+⚠️ **NOTICE: None of this code may be used in prouction code as this repository was forked from a GPL license v3 repo **⚠️
+
 Notice: this repo is no more updated. 
+
 - Extraction of expert features can be found at https://github.com/hsd1503/ENCASE/tree/master/code/featrues_*.py
 - Recent PyTorch implementation of a collection of deep models on 1d signal data can be found at https://github.com/hsd1503/resnet1d 
 

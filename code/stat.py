@@ -1,7 +1,3 @@
-
-import ReadData
-from matplotlib import pyplot as plt
-from collections import Counter
 import numpy as np
 
 def Flatten(l):

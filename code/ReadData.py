@@ -1,11 +1,6 @@
 import random
-from collections import Counter
 import numpy as np
-import sys
-#from DTW import DTW
 import FeatureExtract
-from sklearn import neighbors
-import MyEval
 import dill
 import pickle
 import os.path

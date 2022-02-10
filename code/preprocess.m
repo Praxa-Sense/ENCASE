@@ -8,11 +8,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-fin = fopen('../../REFERENCE.csv');
+fin = fopen('../cinc2017/REFERENCE-v3.csv');
 str=fgetl(fin);
-fout1 = fopen('../../data1/short.csv','w');
-fout2 = fopen('../../data1/long.csv','w');
-fout3 = fopen('../../data1/QRSinfo.csv','w');
+fout1 = fopen('../data1/short.csv','w');
+fout2 = fopen('../data1/long.csv','w');
+fout3 = fopen('../data1/QRSinfo.csv','w');
 
 n_iter = 10;
 ratio = 0.68;
@@ -24,7 +24,7 @@ while ischar(str)
     label = tmp{2};
     
     disp(pid);
-    [tm,ecg,fs,siginfo]=rdmat(strcat('../../training2017/', pid));
+    [tm,ecg,fs,siginfo]=rdmat(strcat('../cinc2017/training2017/', pid));
     [QRS,sign,en_thres] = qrs_detect2(ecg',0.25,0.6,fs);
     QRS_info = diff([0 QRS length(ecg)]);
     

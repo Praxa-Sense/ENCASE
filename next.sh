@@ -25,10 +25,10 @@ RECORD=$1
 
 rm -rf data1
 mkdir data1
-matlab -nodisplay -nosplash -r \
-    "preprocess_sub('$RECORD'); quit"
+#matlab -nodisplay -nosplash -r \
+#    "preprocess_sub('$RECORD'); quit"
 
-python3 code/challenge.py
+# python3 code/challenge.py
 
 # Example (Matlab)
 # matlab -nodisplay -nodisplay -nosplash -r \
@@ -37,7 +37,7 @@ python3 code/challenge.py
 #     catch e; display(getReport(e)); exit(1); end; quit"
 
 # Example (Octave)
-#octave -q -f --eval \
-#    "pkg load signal; pkg load statistics;
-#     x = challenge('$RECORD');
-#     f = fopen('answers.txt', 'a'); fprintf(f, '$RECORD,%s\n', x); fclose(f);"
+octave -q -f --eval \
+   "pkg load signal; pkg load statistics;
+    x = challenge('$RECORD');
+    f = fopen('answers.txt', 'a'); fprintf(f, '$RECORD,%s\n', x); fclose(f);"

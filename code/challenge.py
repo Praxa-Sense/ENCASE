@@ -7,13 +7,13 @@ Created on Sun Feb  5 23:00:34 2017
 """
 
 from collections import Counter
-import numpy as np
-import FeatureExtract
-import MyEval
+# import numpy as np
+# import FeatureExtract
+# import MyEval
 import ReadData
-import dill
-import features_all
-import challenge_encase_mimic
+# import dill
+# import features_all
+# import challenge_encase_mimic
 
 ##############
 #### load classifier
@@ -24,9 +24,11 @@ import challenge_encase_mimic
 ##############
 #### read and extract
 ###############
+print("Reading data ... ", end="")
 short_pid, short_data, short_label = ReadData.ReadData( 'data1/short.csv' )
 long_pid, long_data, long_label = ReadData.ReadData( 'data1/long.csv' )
 QRS_pid, QRS_data, QRS_label = ReadData.ReadData( 'data1/QRSinfo.csv' )
+print("Done!")
 
 
 #############
@@ -36,13 +38,13 @@ QRS_pid, QRS_data, QRS_label = ReadData.ReadData( 'data1/QRSinfo.csv' )
 #out_feats = features_mimic.get_mimic_feature(long_data[0])
 
 
-############
+############x
 ## classifier
 ############
 pred = []
-pred = challenge_encase_mimic.pred_one_sample(short_data, long_data, QRS_data, long_pid, short_pid)
+# pred = challenge_encase_mimic.pred_one_sample(short_data, long_data, QRS_data, long_pid, short_pid)
 
 fout= open('answers.txt','a')
 fout.write(pred[0])
 fout.write('\n')
-fout.close
+fout.close()

@@ -7,7 +7,6 @@ Created on Sun Feb  5 23:00:34 2017
 """
 
 import numpy as np
-import MyEval
 import ReadData
 import dill
 from features_mimic import get_mimic_proba
