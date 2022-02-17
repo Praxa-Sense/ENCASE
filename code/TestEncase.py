@@ -115,7 +115,6 @@ def TestEncase(all_pid, all_feature, all_label):
         clf_4 = MyXGB()
         clf_5 = MyXGB()
 
-        
         clf_final = Encase([clf_1, clf_2, clf_3, clf_4, clf_5])
         clf_final.fit(train_data, train_label)
         

@@ -31,8 +31,6 @@ def gen_model():
     all_feature = np.array(all_feature)
     all_label = np.array(all_label)
     
-    
-        
     clf = MyXGB()
     clf.fit(all_feature, all_label)
         

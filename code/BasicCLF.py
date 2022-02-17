@@ -37,7 +37,8 @@ class MyXGB(object):
         self.num_round = num_round
         self.pred = None
         
-        my_seed = random.randint(0, 1000)
+        # my_seed = random.randint(0, 1000)
+        my_seed = 42
         
         self.param['n_estimators'] = n_estimators
         self.param['max_depth'] = max_depth
@@ -64,8 +65,8 @@ class MyXGB(object):
     def predict(self, test_data):
         pred_prob = self.predict_prob(test_data)
         pred_num = np.argmax(pred_prob, axis=1)
-        pred = ReadData.Index2Label(pred_num)
-        return pred
+        # pred = ReadData.Index2Label(pred_num)
+        return pred_num
     
     def get_importance(self):
         return self.bst.get_score(importance_type='gain')
