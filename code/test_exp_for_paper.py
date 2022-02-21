@@ -27,6 +27,7 @@ def TestExp(all_pid, all_feature, all_label, method, i_iter):
     kf = StratifiedKFold(n_splits=5, shuffle=True)
     i_fold = 5
     print('all feature shape: {0}'.format(all_feature.shape))
+    results = []
     for train_index, test_index in kf.split(all_feature, all_label):
         print("train index size=", len(train_index), len(train_index)/all_feature.shape[0])
         train_data = all_feature[train_index]
@@ -168,6 +169,17 @@ def TestExp(all_pid, all_feature, all_label, method, i_iter):
             clf_final.fit(train_data, train_label)
             pred = clf_final.predict(test_data)
 
+        elif method == 'XGBoost_VariabilityStats':
+            selected_cols = [91, 90, 89, 92, 88]
+            train_data = train_data[:, selected_cols]
+            test_data = test_data[:, selected_cols]
+            print("Train data shape: ", train_data.shape)
+            print("Test data shape: ", test_data.shape)
+            clf_final = MyXGB()
+            # clf_final = MyXGB(n_estimators=100, num_round=50) # Quick and dirty
+            clf_final.fit(train_data, train_label)
+            pred = clf_final.predict(test_data)
+
 
     # res = MyEval.F14Exp(pred, test_label)
     # print(res)
@@ -176,17 +188,22 @@ def TestExp(all_pid, all_feature, all_label, method, i_iter):
     #     fout.write('{0},{1},{2},{3},{4},{5},{6},{7}\n'
     #                .format(method, i_iter, i_fold, res[0], res[1], res[2], res[3], res[4]))
 
-    y = ReadData.Label2Index(test_label)
-    res = classification_report(y, pred, labels=list(range(4)), output_dict=True)
-    pprint(res)
+        y = ReadData.Label2Index(test_label)
+        res = classification_report(y, pred, labels=list(range(4)), output_dict=True)
+        pprint(res)
+        results.append(res)
+
+    mean_f1_scores = [x['macro avg']['f1-score'] for x in results]
+    mean_f1 = np.mean(mean_f1_scores)
+    print(f"F1-score: {mean_f1} += {np.std(mean_f1_scores)}")
     with open(CSV_NAME, 'a') as fout:
-        f1_0 = res['0']['f1-score']
-        f1_1 = res['1']['f1-score']
-        f1_2 = res['2']['f1-score']
-        f1_3 = res['3']['f1-score']
-        f1 = res['macro avg']['f1-score']
-        fout.write('{0},{1},{2},{3},{4},{5},{6},{7}\n'
-                   .format(method, i_iter, i_fold, f1_0, f1_1, f1_2, f1_3, f1))
+        scores = []
+        for i in range(4):
+            f1_cls = np.mean([x[str(i)]['f1-score'] for x in results])
+            print(f"F1_{i}-score:", f1_cls)
+            scores.append(f1_cls)
+        fout.write('{0},{1},{2},{3},{4},{5},{6},{7},{8}\n'
+                   .format(method, i_iter, i_fold, scores[0], scores[1], scores[2], scores[2], mean_f1, np.std(mean_f1_scores)))
 
     i_fold += 1
 
@@ -217,7 +234,7 @@ if __name__ == "__main__":
     # Create header if not exists
     if not os.path.exists(CSV_NAME):
         with open(CSV_NAME, 'w') as fout:
-            fout.write('Method,n_iter,n_fold,F1_N,F1_A,F1_O,F1_P,F1\n')
+            fout.write('Method,n_iter,n_fold,F1_N,F1_A,F1_O,F1_P,F1,F1_std\n')
 
     # method_list = ['SampleEn', 'CDF', 'MAD', 'Variability', 
     #                'LR_E', 'LR_EC', 'LR_ECD', 
@@ -227,12 +244,13 @@ if __name__ == "__main__":
     # method_list = ['ENCASE_E']
     # method_list = ['XGBoost_E', 'ENCASE_E']
     # method_list = ['XGBoost_top10']
-    method_list = ['XGBoost_BasicStats20']
+    # method_list = ['XGBoost_BasicStats20']
+    method_list = ['XGBoost_VariabilityStats']
 
     for method in method_list:
         t = time.time()
-        for i in range(2):
-            TestExp(all_pid, all_feature, all_label, method, i)
+        # for i in range(2):
+        TestExp(all_pid, all_feature, all_label, method, 0)
         print(f"Training {method} took {timedelta(seconds=(time.time() - t))}.")
 
         # Not sure if this is useful, it seems parallelization is already employed by XGBoost?
