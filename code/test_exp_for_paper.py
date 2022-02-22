@@ -12,6 +12,7 @@ from pprint import pprint
 
 import dill
 import numpy as np
+from sklearn.dummy import DummyClassifier
 from sklearn.metrics import classification_report
 from sklearn.model_selection import StratifiedKFold
 
@@ -157,28 +158,57 @@ def TestExp(all_pid, all_feature, all_label, method, i_iter):
             clf_final = MyXGB()
             clf_final.fit(train_data, train_label)
             pred = clf_final.predict(test_data)
-
+            y = ReadData.Label2Index(test_label)
         elif method == 'XGBoost_BasicStats20':
             selected_cols = [57, 51, 50, 59, 61, 55, 58, 62, 60, 52, 72, 66, 65, 75, 69, 68, 70, 67, 74, 73]
             train_data = train_data[:, selected_cols]
             test_data = test_data[:, selected_cols]
-            print("Train data shape: ", train_data.shape)
-            print("Test data shape: ", test_data.shape)
             clf_final = MyXGB()
-            # clf_final = MyXGB(n_estimators=100, num_round=50) # Quick and dirty
             clf_final.fit(train_data, train_label)
             pred = clf_final.predict(test_data)
-
+            y = ReadData.Label2Index(test_label)
         elif method == 'XGBoost_VariabilityStats':
             selected_cols = [91, 90, 89, 92, 88]
             train_data = train_data[:, selected_cols]
             test_data = test_data[:, selected_cols]
-            print("Train data shape: ", train_data.shape)
-            print("Test data shape: ", test_data.shape)
             clf_final = MyXGB()
-            # clf_final = MyXGB(n_estimators=100, num_round=50) # Quick and dirty
             clf_final.fit(train_data, train_label)
             pred = clf_final.predict(test_data)
+            y = ReadData.Label2Index(test_label)
+        elif method == 'XGBoost_DeltaRRStats':
+            # selected_cols = [86, 84, 79, 80, 82, 85, 78, 81, 76, 77, 83]
+            selected_cols = [86, 84, 79, 80, 82, 85, 78, 81]
+            train_data = train_data[:, selected_cols]
+            test_data = test_data[:, selected_cols]
+            clf_final = MyXGB()
+            clf_final.fit(train_data, train_label)
+            pred = clf_final.predict(test_data)
+            y = ReadData.Label2Index(test_label)
+        elif method == 'XGBoost_Sampen2':
+            selected_cols = [42, 43, 44, 45]
+            train_data = train_data[:, selected_cols]
+            test_data = test_data[:, selected_cols]
+            clf_final = MyXGB()
+            clf_final.fit(train_data, train_label)
+            pred = clf_final.predict(test_data)
+            y = ReadData.Label2Index(test_label)
+        elif method == 'DummyClassifier':
+            clf_final = DummyClassifier()
+            clf_final.fit(train_data, train_label)
+            pred = clf_final.predict(test_data)
+            y = ReadData.Label2Index(test_label)
+            pred = ReadData.Label2Index(pred)
+        elif method == 'XGBoost_bin_stat':
+            selected_cols = list(range(95, 146 + 1))
+            train_data = train_data[:, selected_cols]
+            test_data = test_data[:, selected_cols]
+            clf_final = MyXGB()
+            clf_final.fit(train_data, train_label)
+            pred = clf_final.predict(test_data)
+            y = ReadData.Label2Index(test_label)
+        else:
+            raise ValueError("Unknown method ", method)
+
 
 
     # res = MyEval.F14Exp(pred, test_label)
@@ -188,7 +218,6 @@ def TestExp(all_pid, all_feature, all_label, method, i_iter):
     #     fout.write('{0},{1},{2},{3},{4},{5},{6},{7}\n'
     #                .format(method, i_iter, i_fold, res[0], res[1], res[2], res[3], res[4]))
 
-        y = ReadData.Label2Index(test_label)
         res = classification_report(y, pred, labels=list(range(4)), output_dict=True)
         pprint(res)
         results.append(res)
@@ -245,7 +274,8 @@ if __name__ == "__main__":
     # method_list = ['XGBoost_E', 'ENCASE_E']
     # method_list = ['XGBoost_top10']
     # method_list = ['XGBoost_BasicStats20']
-    method_list = ['XGBoost_VariabilityStats']
+    # method_list = ['XGBoost_Sampen2']
+    method_list = ['XGBoost_bin_stat']
 
     for method in method_list:
         t = time.time()

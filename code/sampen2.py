@@ -1,5 +1,7 @@
 import math
 
+import numpy as np
+
 from normalize_data import normalize_data
 
 
@@ -195,7 +197,9 @@ def sampen2(data, mm=2, r=0.2, normalize=False):
 
 if __name__ == '__main__':
 #    print(sampen2(np.array([2.0, 1.0, 2.0, 2.0, 1.0, 2.0])))
-    print(sampen2(np.array([1,1,1,1, 1, 1])))
+#     print(sampen2(np.array([1,1,1,1, 1, 1])))
+    rr = [130, 217, 214, 237, 243, 231, 239, 244, 241, 237, 238, 243, 239, 237, 244, 246, 235, 226, 231, 228, 228, 218, 215, 224, 227, 232, 221, 221, 222, 220, 213, 219, 223, 215, 212, 219, 227, 231, 224, 189]
+    print(sampen2(rr, mm=3))
 
 
 
